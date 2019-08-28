@@ -58,8 +58,8 @@ public class LoginAndAuthority {
         Class clazz = doMatch.getClass();
         Object o = clazz.newInstance();
         Method m = clazz.getDeclaredMethod(type, String.class, String.class, int.class);
-        String getpassword = MyStringUtils.Object2String(m.invoke(o, password, salt, time));
-        if (db_password.equals(getpassword)) {
+        String getPassword = MyStringUtils.Object2String(m.invoke(o, password, salt, time));
+        if (db_password.equals(getPassword)) {
             //密码相等，则将该用户放入session中
             Object o1 = info.getUser();
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
