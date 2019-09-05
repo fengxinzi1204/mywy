@@ -15,8 +15,8 @@ import java.util.HashMap;
 @RestControllerAdvice
 @Slf4j
 public class ExceptionController {
-    @ExceptionHandler(value = Permission_denied.class)
-    public HashMap Except(Permission_denied throwable) {
+    @ExceptionHandler(value = PermissionDeniedException.class)
+    public HashMap Except(PermissionDeniedException throwable) {
         log.error(throwable.getMessage());
         HashMap hashMap = new HashMap();
         hashMap.put("errcode", 403);

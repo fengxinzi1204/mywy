@@ -80,8 +80,8 @@ public class LoginAndAuthority {
         List<String> role = new ArrayList<>();
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         //将对象放入session中
-        attributes.getRequest().getSession().setAttribute(AuthorityEnum.getvalue(AuthorityEnum.permit), permit);
-        attributes.getRequest().getSession().setAttribute(AuthorityEnum.getvalue(AuthorityEnum.role), role);
+        attributes.getRequest().getSession().setAttribute(AuthorityEnum.getValue(AuthorityEnum.permit), permit);
+        attributes.getRequest().getSession().setAttribute(AuthorityEnum.getValue(AuthorityEnum.role), role);
     }
 
 }

@@ -2,13 +2,11 @@ package com.mzd.mywy.myshiro.authority;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.mzd.mywy.myshiro.exception.CacheException;
 import com.mzd.mywy.myshiro.exception.LoginAndAuthorityException;
-import com.mzd.mywy.myshiro.exception.Permission_denied;
+import com.mzd.mywy.myshiro.exception.PermissionDeniedException;
 import com.mzd.mywy.myshiro.login.LoginAndAuthority;
 import com.mzd.mywy.myshiro.login.MyCache;
-import com.mzd.mywy.myshiro.login.bean.My_Usersession;
 import com.mzd.mywy.utils.MyStringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -52,24 +50,24 @@ public class PermitAop {
             //是否缓存授权
             boolean ifcache_authc = myCache.isIfcache_authc();
             //是否授权过
-            String ifatuthc = MyStringUtils.Object2String(request.getSession().getAttribute(CacheEnum.getvalue(CacheEnum.ifatuthc)));
-            if (ifatuthc.equals("1")) {
+            String ifatuthc = MyStringUtils.Object2String(request.getSession().getAttribute(CacheEnum.getValue(CacheEnum.ifatuthc)));
+            if ("1".equals(ifatuthc)) {
                 //缓存授权
                 if (ifcache_authc) {
-                    String permits = MyStringUtils.Object2String(request.getSession().getAttribute(AuthorityEnum.getvalue(AuthorityEnum.permit)));
-                    if (permits.equals("")) {
+                    String permits = MyStringUtils.Object2String(request.getSession().getAttribute(AuthorityEnum.getValue(AuthorityEnum.permit)));
+                    if ("".equals(permits)) {
                         //权限不足
-                        throw new Permission_denied();
+                        throw new PermissionDeniedException();
                     } else {
                         jsonArray = JSON.parseArray(permits);
                     }
                 } else {
                     //不缓存授权---直接读取数据库
                     loginAndAuthority.doauthc();
-                    String permits = MyStringUtils.Object2String(request.getSession().getAttribute(AuthorityEnum.getvalue(AuthorityEnum.permit)));
-                    if (permits.equals("")) {
+                    String permits = MyStringUtils.Object2String(request.getSession().getAttribute(AuthorityEnum.getValue(AuthorityEnum.permit)));
+                    if ("".equals(permits)) {
                         //权限不足
-                        throw new Permission_denied();
+                        throw new PermissionDeniedException();
                     } else {
                         jsonArray = JSON.parseArray(permits);
                     }
@@ -77,14 +75,14 @@ public class PermitAop {
             } else {
                 //未授权---直接读取数据库
                 loginAndAuthority.doauthc();
-                String permits = MyStringUtils.Object2String(request.getSession().getAttribute(AuthorityEnum.getvalue(AuthorityEnum.permit)));
-                if (permits.equals("")) {
+                String permits = MyStringUtils.Object2String(request.getSession().getAttribute(AuthorityEnum.getValue(AuthorityEnum.permit)));
+                if ("".equals(permits)) {
                     //权限不足
-                    throw new Permission_denied();
+                    throw new PermissionDeniedException();
                 } else {
                     jsonArray = JSON.parseArray(permits);
                 }
-                request.getSession().setAttribute(CacheEnum.getvalue(CacheEnum.ifatuthc), "1");
+                request.getSession().setAttribute(CacheEnum.getValue(CacheEnum.ifatuthc), "1");
             }
         }
         boolean ifpermit = false;
@@ -102,7 +100,7 @@ public class PermitAop {
             return point.proceed();
         } else {
             //没有权限
-            throw new Permission_denied();
+            throw new PermissionDeniedException();
         }
     }
 

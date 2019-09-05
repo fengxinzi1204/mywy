@@ -1,10 +1,10 @@
 package com.mzd.mywy.myshiro.login;
 
-import com.mzd.mywy.myshiro.login.encryption.Encryption_Type_Enum;
+import com.mzd.mywy.myshiro.login.encryption.EncryptionTypeEnum;
 
 public class MyMatcher {
     //加密类型（默认是不加密）
-    private String Encryption_method = Encryption_Type_Enum.gettype(Encryption_Type_Enum.Unencrypted);
+    private String Encryption_method = EncryptionTypeEnum.getType(EncryptionTypeEnum.Unencrypted);
     //加密次数
     private int times = 1;
 

@@ -2,14 +2,11 @@ package com.mzd.mywy.myshiro.authority;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.mzd.mywy.myshiro.exception.CacheException;
 import com.mzd.mywy.myshiro.exception.LoginAndAuthorityException;
-import com.mzd.mywy.myshiro.exception.Permission_denied;
+import com.mzd.mywy.myshiro.exception.PermissionDeniedException;
 import com.mzd.mywy.myshiro.login.LoginAndAuthority;
 import com.mzd.mywy.myshiro.login.MyCache;
-import com.mzd.mywy.myshiro.login.bean.My_Usersession;
-import com.mzd.mywy.service.TestService;
 import com.mzd.mywy.utils.MyStringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -53,24 +50,24 @@ public class RoleAop {
             //是否缓存授权
             boolean ifcache_authc = myCache.isIfcache_authc();
             //是否授权过
-            String ifatuthc = MyStringUtils.Object2String(request.getSession().getAttribute(CacheEnum.getvalue(CacheEnum.ifatuthc)));
-            if (ifatuthc.equals("1")) {
+            String ifatuthc = MyStringUtils.Object2String(request.getSession().getAttribute(CacheEnum.getValue(CacheEnum.ifatuthc)));
+            if ("1".equals(ifatuthc)) {
                 //缓存授权
                 if (ifcache_authc) {
-                    String roles = MyStringUtils.Object2String(request.getSession().getAttribute(AuthorityEnum.getvalue(AuthorityEnum.role)));
-                    if (roles.equals("")) {
+                    String roles = MyStringUtils.Object2String(request.getSession().getAttribute(AuthorityEnum.getValue(AuthorityEnum.role)));
+                    if ("".equals(roles)) {
                         //权限不足
-                        throw new Permission_denied();
+                        throw new PermissionDeniedException();
                     } else {
                         jsonArray = JSON.parseArray(roles);
                     }
                 } else {
                     //不缓存授权---直接读取数据库
                     loginAndAuthority.doauthc();
-                    String roles = MyStringUtils.Object2String(request.getSession().getAttribute(AuthorityEnum.getvalue(AuthorityEnum.role)));
-                    if (roles.equals("")) {
+                    String roles = MyStringUtils.Object2String(request.getSession().getAttribute(AuthorityEnum.getValue(AuthorityEnum.role)));
+                    if ("".equals(roles)) {
                         //权限不足
-                        throw new Permission_denied();
+                        throw new PermissionDeniedException();
                     } else {
                         jsonArray = JSON.parseArray(roles);
                     }
@@ -78,14 +75,14 @@ public class RoleAop {
             } else {
                 //未授权---直接读取数据库
                 loginAndAuthority.doauthc();
-                String roles = MyStringUtils.Object2String(request.getSession().getAttribute(AuthorityEnum.getvalue(AuthorityEnum.role)));
-                if (roles.equals("")) {
+                String roles = MyStringUtils.Object2String(request.getSession().getAttribute(AuthorityEnum.getValue(AuthorityEnum.role)));
+                if ("".equals(roles)) {
                     //权限不足
-                    throw new Permission_denied();
+                    throw new PermissionDeniedException();
                 } else {
                     jsonArray = JSON.parseArray(roles);
                 }
-                request.getSession().setAttribute(CacheEnum.getvalue(CacheEnum.ifatuthc), "1");
+                request.getSession().setAttribute(CacheEnum.getValue(CacheEnum.ifatuthc), "1");
             }
         }
         boolean ifrole = false;
@@ -101,7 +98,7 @@ public class RoleAop {
         if (ifrole) {
             return point.proceed();
         } else {
-            throw new Permission_denied();
+            throw new PermissionDeniedException();
         }
     }
 }

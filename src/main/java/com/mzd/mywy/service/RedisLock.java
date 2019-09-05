@@ -42,7 +42,7 @@ public class RedisLock {
             return true;
         }
         String current_value = redisTemplate.opsForValue().get(key);
-        if (!MyStringUtils.Object2String(current_value).equals("")
+        if (!"".equals(MyStringUtils.Object2String(current_value))
                 //超时了
                 && Long.parseLong(current_value) < System.currentTimeMillis()) {
             //返回true就能解决死锁
@@ -63,11 +63,11 @@ public class RedisLock {
             return true;
         }
         String current_value = redisTemplate.opsForValue().get(key);
-        if (!MyStringUtils.Object2String(current_value).equals("")
+        if (!"".equals(MyStringUtils.Object2String(current_value))
                 //超时了
                 && Long.parseLong(current_value) < System.currentTimeMillis()) {//①
             String old_value = redisTemplate.opsForValue().getAndSet(key, value);//②
-            if (!MyStringUtils.Object2String(old_value).equals("")
+            if (!"".equals(MyStringUtils.Object2String(old_value))
                     //如果两个线程同时调用这个方法，当同时走到①的时候，
                     // 无论怎么样都有一个线程会先执行②这一行，
                     //假设线程1先执行②这行代码，那redis中key对应的value就变成了value

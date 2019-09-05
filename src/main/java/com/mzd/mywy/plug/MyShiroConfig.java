@@ -1,20 +1,18 @@
 package com.mzd.mywy.plug;
 
 import com.mzd.mywy.myshiro.login.*;
-import com.mzd.mywy.myshiro.login.encryption.Encryption_Type_Enum;
+import com.mzd.mywy.myshiro.login.encryption.EncryptionTypeEnum;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.TreeMap;
 
 @Component
 public class MyShiroConfig {
 
     @Bean("myMatcher")
     public MyMatcher getMyMatcher() {
-        return new MyMatcher(Encryption_Type_Enum.gettype(Encryption_Type_Enum.Md5), 2);
+        return new MyMatcher(EncryptionTypeEnum.getType(EncryptionTypeEnum.Md5), 2);
     }
 
     @Bean("loginAndAuthority")

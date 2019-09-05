@@ -25,7 +25,7 @@ public class Login {
         if (isF) {
             //登入了
             ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-            attributes.getRequest().getSession().setAttribute(CacheEnum.getvalue(CacheEnum.iflogin), "1");
+            attributes.getRequest().getSession().setAttribute(CacheEnum.getValue(CacheEnum.iflogin), "1");
         }
         return isF;
     }

@@ -49,8 +49,8 @@ public class MyRealm extends LoginAndAuthority {
         role.add("A");
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         //将对象放入session中
-        attributes.getRequest().getSession().setAttribute(AuthorityEnum.getvalue(AuthorityEnum.permit), JSON.toJSONString(permit));
-        attributes.getRequest().getSession().setAttribute(AuthorityEnum.getvalue(AuthorityEnum.role), JSON.toJSONString(role));
+        attributes.getRequest().getSession().setAttribute(AuthorityEnum.getValue(AuthorityEnum.permit), JSON.toJSONString(permit));
+        attributes.getRequest().getSession().setAttribute(AuthorityEnum.getValue(AuthorityEnum.role), JSON.toJSONString(role));
 
     }
 }

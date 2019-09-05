@@ -2,7 +2,6 @@ package com.mzd.mywy.myshiro.login;
 
 import com.alibaba.fastjson.JSON;
 import com.mzd.mywy.myshiro.authority.CacheEnum;
-import com.mzd.mywy.myshiro.exception.Permission_denied;
 import com.mzd.mywy.utils.MyStringUtils;
 
 import javax.servlet.*;
@@ -41,10 +40,10 @@ public class MyshiroFilter implements Filter {
         String uri = request.getRequestURI() + "";
         String qx = getvalue(uri);
         String qx_uri = filter_url.get(qx);
-        if (qx_uri == null || qx_uri.equals("") || qx_uri.equals("authc")) {
+        if (qx_uri == null || "".equals(qx_uri) || "authc".equals(qx_uri)) {
             //说明不能匿名访问
-            String iflogin = MyStringUtils.Object2String(request.getSession().getAttribute(CacheEnum.getvalue(CacheEnum.iflogin)));
-            if (iflogin.equals("")) {
+            String iflogin = MyStringUtils.Object2String(request.getSession().getAttribute(CacheEnum.getValue(CacheEnum.iflogin)));
+            if ("".equals(iflogin)) {
                 //说明没有登入过了
                 HttpServletResponse response = (HttpServletResponse) servletResponse;
                 HashMap hashMap = new HashMap();

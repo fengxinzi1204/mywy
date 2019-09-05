@@ -1,17 +1,20 @@
 package com.mzd.mywy.myshiro.authority;
 
 public enum AuthorityEnum {
+    /**
+     * 权限认证
+     */
     role("角色", "role"),
     permit("权限点", "permit");
-    private String permit_dis;
-    private String permit_value;
+    private String permitDis;
+    private String permitValue;
 
-    AuthorityEnum(String permit_dis, String permit_value) {
-        this.permit_dis = permit_dis;
-        this.permit_value = permit_value;
+    AuthorityEnum(String permitDis, String permitValue) {
+        this.permitDis = permitDis;
+        this.permitValue = permitValue;
     }
 
-    public static String getvalue(AuthorityEnum permitEnum) {
-        return permitEnum.permit_value;
+    public static String getValue(AuthorityEnum permitEnum) {
+        return permitEnum.permitValue;
     }
 }
