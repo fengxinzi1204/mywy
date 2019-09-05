@@ -1,7 +1,5 @@
 package com.mzd.mywy.myshiro.login;
 
-import com.google.common.io.ByteSource;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
