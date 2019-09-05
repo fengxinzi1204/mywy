@@ -54,6 +54,10 @@ public class RedisLock {
 
     /**
      * 加锁
+     *
+     * @param key   key
+     * @param value value
+     * @return
      */
     public boolean lock3(String key, String value) {
         //setIfAbsent相当于jedis中的setnx，如果能赋值就返回true，如果已经有值了，就返回false
@@ -62,25 +66,30 @@ public class RedisLock {
             //第一次，即：这个key还没有被赋值的时候
             return true;
         }
-        String current_value = redisTemplate.opsForValue().get(key);
-        if (!"".equals(MyStringUtils.Object2String(current_value))
+        String currentValue = redisTemplate.opsForValue().get(key);
+        if (!"".equals(MyStringUtils.Object2String(currentValue))
                 //超时了
-                && Long.parseLong(current_value) < System.currentTimeMillis()) {//①
-            String old_value = redisTemplate.opsForValue().getAndSet(key, value);//②
-            if (!"".equals(MyStringUtils.Object2String(old_value))
+                && Long.parseLong(currentValue) < System.currentTimeMillis()) {
+            //①
+            String oldValue = redisTemplate.opsForValue().getAndSet(key, value);
+            //②
+            return !"".equals(MyStringUtils.Object2String(oldValue))
                     //如果两个线程同时调用这个方法，当同时走到①的时候，
                     // 无论怎么样都有一个线程会先执行②这一行，
                     //假设线程1先执行②这行代码，那redis中key对应的value就变成了value
                     //然后线程2再执行②这行代码的时候，获取到的old_value就是value，
                     //那么value显然和他上面获取的current_value是不一样的，则线程2是没法获取锁的
-                    && old_value.equals(current_value)) {
-                return true;
-            }
+                    && oldValue.equals(currentValue);
         }
         return false;
     }
 
-
+    /**
+     * redis解锁
+     *
+     * @param key   key
+     * @param value value
+     */
     public void unlock(String key, String value) {
         try {
             if (MyStringUtils.Object2String(redisTemplate.opsForValue().get(key)).equals(value)) {
